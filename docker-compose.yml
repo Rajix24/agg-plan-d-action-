@@ -1,0 +1,19 @@
+services:
+  mongodb:
+    image: mongo:8
+    container_name: database_plan_action
+    restart: unless-stopped
+
+    ports:
+      - "27020:27017"
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: rajix
+      MONGO_INITDB_ROOT_PASSWORD: rajix_mongo
+      MONGO_INITDB_DATABASE: roadfleet
+
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
