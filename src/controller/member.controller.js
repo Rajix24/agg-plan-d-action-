@@ -67,6 +67,22 @@ const memberService =  require("../services/member.service.js")
                 })
             }
         }
+
+        maintenance_agg = async (req, res)=>{
+            try{
+                const data = await this.memberService.maintenance_agg()
+                res.status(200).json({
+                    message: "operation is done",
+                    data: data
+                })
+            }catch(error){
+                console.error(error)
+                res.status(500).json({
+                    message: "error in application",
+                    error: error.message
+                })
+            }
+        }
 }
 
 module.exports = new memberController()

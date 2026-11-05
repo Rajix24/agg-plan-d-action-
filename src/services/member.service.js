@@ -1,11 +1,13 @@
 const memberModel = require("../models/member.model")
 const loanModel = require("../models/loan.model")
+const maintenanceModel = require("../models/maintenance.model")
 
 class memberService{
 
     constructor(){
         this.member = memberModel;
         this.loan = loanModel;
+        this.maintenance = maintenanceModel;
     }
     async get(){
         return await this.member.find()
@@ -106,6 +108,41 @@ class memberService{
                 }
             },
             { $sort: { revenueCents: -1, city: 1 } }
+        ])
+    }
+
+    async maintenance_agg(){
+        return await this.maintenance.aggregate([
+            { $match: { status: "DONE" } },
+            {
+                $lookup: {
+                    from: "equipments",
+                    localField: "equipmentId",
+                    foreignField: "_id",
+                    as: "equipment"
+                }
+            },
+            // Removes interventions with no matching equipment (no usable category).
+            { $unwind: "$equipment" },
+            { $match: { "equipment.archived": { $ne: true } } },
+            {
+                $group: {
+                    _id: "$equipment.category",
+                    interventionCount: { $sum: 1 },
+                    totalCostCents: { $sum: "$costCents" },
+                    averageCostCents: { $avg: "$costCents" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    category: "$_id",
+                    interventionCount: 1,
+                    averageCostCents: { $round: ["$averageCostCents", 2] },
+                    totalCostCents: 1
+                }
+            },
+            { $sort: { totalCostCents: -1 } }
         ])
     }
 }
