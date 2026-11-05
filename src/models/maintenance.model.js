@@ -38,7 +38,8 @@ const maintenanceSchema = new mongoose.Schema(
 
 const Maintenance = mongoose.model(
   "Maintenance",
-  maintenanceSchema
+  maintenanceSchema,
+  "maintenance"
 );
 
 module.exports = Maintenance;

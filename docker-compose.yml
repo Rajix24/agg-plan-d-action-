@@ -10,7 +10,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: rajix
       MONGO_INITDB_ROOT_PASSWORD: rajix_mongo
-      MONGO_INITDB_DATABASE: roadfleet
+      MONGO_INITDB_DATABASE: pl_aggregations
 
     volumes:
       - mongodb_data:/data/db

@@ -7,18 +7,15 @@ require('dotenv').config()
 const port = process.env.PORT || 3000
 
 
-mongo_url = process.env.MONGO_URL
-
-
-
 async function startApplication(){
     try{
-    connection_db()
+    await connection_db()
     app.listen(port, ()=>{
         console.log(`server is running on port ${port}..... `)
     })
     }catch(err){
-        console.log(err)
+        console.error(err)
+        process.exitCode = 1
     }
 }
 startApplication()

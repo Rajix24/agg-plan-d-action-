@@ -4,15 +4,13 @@ const db_url = process.env.MONGO_URL
 
 
 
-function connection_db(){
-    try{
-        mongo.connect(db_url).then(()=>{
-            console.log("database are connected...... ")
-        })
-    }catch(err){
-        console.log(err)
-        throw new Error("database connection faile....")
+async function connection_db(){
+    if (!db_url) {
+        throw new Error("MONGO_URL is not configured");
     }
+
+    await mongo.connect(db_url);
+    console.log(`database connected: ${mongo.connection.name}`);
 }
 
 
